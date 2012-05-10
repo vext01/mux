@@ -1,7 +1,5 @@
-#!/bin/bash 
-#
-# this is a comment
-#
+#!/bin/sh 
+
 echo "lrs-stage: "
 
 FILES="$(ls *.ine)"

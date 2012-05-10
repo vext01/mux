@@ -1,30 +1,39 @@
-#!/bin/bash 
-#
-# trying to combine two scripts...
+#!/bin/sh
+
+LRS=glrs
 
 INFILE=$1
 OUTDIR=${1%.txt}-mux-results
 
-
-chmod +x *.bash
-
 # create lrs-input-files
-./mux-setup.bash $INFILE
-
+echo "Generating LRS input..."
+swipl -q -g main -s mux-setup.pl -- ${INFILE}
 
 # create working directory and move .ine files and relevant scripts into it
 mkdir $OUTDIR
 
 # go to working directory, run lrs on all files
-./run-lrs-all.bash
+FILES=`ls *.ine`
+for LRSIN in $FILES; do
+	LRSOUT=${LRSIN%ine}out
+	echo "Invoking LRS on ${LRSIN}...";
+	${LRS} ${LRSIN} ${LRSOUT}
+done
+
 rm *.ine
 
 # run interpretation on all files
-./interpret-all.bash
+#sh interpret-all.bash
+INTERP_FILES=`ls *.out`
+for INFILE in ${INTERP_FILES}; do
+	g=${INFILE%.out}
+	swipl -q -g main -s mux-interpretation.pl -- $g
+done
+
+
 rm *.constraints
 rm *.out
 
 
 mv *.mux $OUTDIR
 cd ..
-
