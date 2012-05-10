@@ -1,6 +1,17 @@
 #!/bin/sh
 
-LRS=glrs
+echo -n "Searching for LRS..."
+LRS=`which lrs 2> /dev/null`
+if [ -z "${LRS}" ]; then
+	LRS=`which glrs 2> /dev/null`
+fi
+
+if [ -z "${LRS}" ]; then
+	echo "not found!"
+	exit 1;
+fi
+
+echo "${LRS}"
 
 INFILE=$1
 OUTDIR=${1%.txt}-mux-results
@@ -20,20 +31,18 @@ for LRSIN in $FILES; do
 	${LRS} ${LRSIN} ${LRSOUT}
 done
 
-rm *.ine
 
 # run interpretation on all files
-#sh interpret-all.bash
 INTERP_FILES=`ls *.out`
 for INFILE in ${INTERP_FILES}; do
 	g=${INFILE%.out}
 	swipl -q -g main -s mux-interpretation.pl -- $g
 done
 
-
+# tidy up
+rm *.ine
 rm *.constraints
 rm *.out
 
-
+# stash results
 mv *.mux $OUTDIR
-cd ..
