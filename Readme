@@ -1,0 +1,75 @@
+-----------
+DESCRIPTION
+-----------
+This is a demo-implementation of the method for inferring mutual exclusion conditions between clauses of constraints described in "Mutual Exclusion by Interpolation" (A. King & J. Kriener, FLOPS 2012 - available at http://www.cs.kent.ac.uk/pubs/2012/3201/index.html).
+
+author: Jael Kriener
+Please send any questions, problems, comments, etc to jek26@kent.ac.uk !
+
+
+
+------------
+REQUIREMENTS
+------------
+ To run the mux script one needs to have the following:
+
+1. A unix command line shell. 
+2. SWI-Prolog (or something equivalent) installed.
+3. David Avis' lrs installed and available in the current path.
+	It's available here: http://cgm.cs.mcgill.ca/~avis/C/lrs.html
+	The easiest way to make it available is probably to copy the 'lrs'-script into your current directory after intalling it.
+	
+
+-----
+SETUP
+-----
+ To run the mux script one needs to do the following: 
+
+1. Edit the first lines of 'mux-setup.bash' and 'mux-interpretation.bash' to specify the path to the prolog executable in your system.
+2. Make 'mux' executable by running some equivalent of the following:
+	chmod +x mux
+
+Having done these two things, one should be able to run the mux algorithm by typing this: 
+	./mux <input-file> 
+
+-----
+INPUT
+-----
+ The input is specified in a .txt-file. The input syntax is somewhat akin to prolog syntax. 'example.txt' is an example of an input file to mux:
+
+The input specifies arbitrarily many sets of clauses of constraints.
+Each set shares a head (identifier + variables). 
+Each clause has a body, preceded by ':-' and closed by '.', 
+containing a list of linear constraints (separated by commata) on the head-variables. 
+The constraints are either inequalities with '=<' separating the two sides, 
+or equalities with '=' separating the two sides. 
+
+
+
+!! Limitations: !! 
+- The current version of the code only supports variable names [A .. Z], i.e. single character, capital letters.
+- The file should not contain anything after the '.' ending the last clause.  
+
+------
+OUTPUT
+------
+ If the run is successful, the script creates a new sub-directory in your current directory, called '<input>-mux-results', which contains a .mux-file for each set of clauses in the input file.
+
+Each .mux-file contains
+	- a list of all the n-tuples of generalised reverse interpolants found,
+	- a list of the binary mux-conditions between all those pairs of clauses which are found to be mutually exclusive. 
+
+
+-----------
+FUTURE WORK
+-----------
+Some things that should be added/ improved:
+
+	- Remove limitation on variable names. 
+	- Calculate an n-ary mux, depending on a user-specified n ('2' producing the current behaviour).
+ 	- Calculate the full mux-condition, rather than just the ones on pairs of clauses. 
+	- Efficiency:
+		- the linear arithmetic - there's got to be a better way then the list-stuff I'm doing! 
+
+
+

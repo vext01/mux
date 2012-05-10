@@ -1,0 +1,30 @@
+#!/bin/bash 
+#
+# trying to combine two scripts...
+
+INFILE=$1
+OUTDIR=${1%.txt}-mux-results
+
+
+chmod +x *.bash
+
+# create lrs-input-files
+./mux-setup.bash $INFILE
+
+
+# create working directory and move .ine files and relevant scripts into it
+mkdir $OUTDIR
+
+# go to working directory, run lrs on all files
+./run-lrs-all.bash
+rm *.ine
+
+# run interpretation on all files
+./interpret-all.bash
+rm *.constraints
+rm *.out
+
+
+mv *.mux $OUTDIR
+cd ..
+

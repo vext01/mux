@@ -1,0 +1,7 @@
+append(X,Y,Z) :- X=0, Y=Z.
+append(X,Y,Z) :- 1=<X, Y+1=<Z.
+
+multiplex(X, Y, Z) :- X=0, Z=0.
+multiplex(X, Y, Z) :- X=1, Y=1, Z=3.
+multiplex(X, Y, Z) :- X=1, Y=2, Z=4.
+multiplex(X, Y, Z) :- 2=<X, Z=2X+Y.
